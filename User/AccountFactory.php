@@ -67,7 +67,28 @@ class AccountFactory {
 	protected function findFieldValue( $field, $service, $userData ) {
 
 		$map = $this->getAccountMap( $service );
-		$fieldPath = $map[$field];
+		$fieldPath = $map[$field];		
+		
+		if( strpos( $fieldPath, '+' ) > 0 ) {
+			$parts = explode('+', $fieldPath);
+			$values = array();
+			foreach ( $parts as $part ) {
+				$trimmedPart = trim( $part );
+				$values[$trimmedPart] = $this->findScalarFieldValue( $trimmedPart, $service, $userData );
+			}
+			
+			$values['+'] = '';
+			$values['  '] = ' ';
+			
+			return str_replace(array_keys($values), $values, $fieldPath);
+			
+		} else {
+			return $this->findScalarFieldValue( $fieldPath, $service, $userData );
+		}
+		
+	}
+	
+	protected function findScalarFieldValue( $fieldPath, $service, $userData ) {
 		
 		foreach( explode( '.', $fieldPath ) as $key ) {
 			if (!array_key_exists( $key, $userData ) ) {
@@ -83,7 +104,8 @@ class AccountFactory {
 		
 		return $userData;
 	}
-	
+
+
 	/**
 	 *
 	 * @param string $service
@@ -91,7 +113,7 @@ class AccountFactory {
 	 */
 	protected function getAccountMap( $service ) {
 		if ( !array_key_exists($service, $this->accountsMap) ) {
-			throw new \InvalidArgumentException( "Accont fields map not found for service '$service' " );
+			throw new \InvalidArgumentException( "Account fields map not found for service '$service' " );
 		} 
 		return $this->accountsMap[$service];
 	}
