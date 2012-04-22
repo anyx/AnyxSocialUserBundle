@@ -4,7 +4,7 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-	<embedded-document name="Anyx\SocialUserBundle\User\SocialAccount">
+	<embedded-document name="Anyx\SocialUserBundle\Model\SocialAccount">
 		<field fieldName="id" id="true" />
 		<field fieldName="serviceName" name="serviceName" type="string" />
 		<field fieldName="accountId" name="accountId" type="string" />
@@ -13,4 +13,3 @@
 	</embedded-document>
 
 </doctrine-mongo-mapping>
-							

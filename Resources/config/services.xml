@@ -6,7 +6,7 @@
 
     <parameters>
 		<!-- o -->
-		<parameter key="anyx_social_user.account.factory.class">Anyx\SocialUserBundle\User\AccountFactory</parameter>
+		<parameter key="anyx_social_user.account.factory.class">Anyx\SocialUserBundle\Model\AccountFactory</parameter>
 		
 		<!-- User managers -->
 		<parameter key="anyx_social_user.user.manager.mongodb.class">Anyx\SocialUserBundle\Document\UserManager</parameter>
@@ -26,6 +26,9 @@
             <argument type="service" id="fos_user.util.email_canonicalizer" />
             <argument type="service" id="fos_user.document_manager" />
             <argument>%fos_user.model.user.class%</argument>
+			<call method="setDispatcher">
+				<argument type="service" id="event_dispatcher"/>
+			</call>
 		</service>
 		
 		<!-- Controllers -->

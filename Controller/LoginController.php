@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Core\SecurityContext;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -14,7 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 use Anyx\SocialBundle\Authentication;
-use Anyx\SocialUserBundle\User\AccountFactory;
+use Anyx\SocialUserBundle\Model\AccountFactory;
 
 use FOS\UserBundle\Document\UserManager as UserManager;
 
@@ -23,10 +24,6 @@ use FOS\UserBundle\Document\UserManager as UserManager;
  */
 class LoginController extends Controller
 {
-	/**
-	 * @var type 
-	 */
-	protected $request;
 
 	/**
 	 * @var Anyx\SocialBundle\Authentication\Manager
@@ -34,31 +31,30 @@ class LoginController extends Controller
 	protected $authenticationManager;
 
 	/**
-	 *
-	 * @var AccountFactory;
+	 * @var Anyx\SocialUserBundle\User\AccountFactory;
 	 */
 	protected $accountFactory;
 	
 	/**
-	 *
+	 * @var FOS\UserBundle\Document\UserManager
 	 */
 	protected $userManager;
 
 	/**
-	 *
+	 * @var Symfony\Component\Security\Core\SecurityContext
 	 */
 	protected $securityContext;
 
 	/**
 	 *
 	 * @param Authentication\Manager $authenticationManager
-	 * @param type $userManager
+	 * @param UserManager $userManager
 	 * @param type $securityContext 
 	 */
 	function __construct(	Authentication\Manager $authenticationManager,
 							AccountFactory $accountFactory,
 							UserManager $userManager,
-							$securityContext ) {
+							SecurityContext $securityContext ) {
 		
 		$this->authenticationManager = $authenticationManager;
 		$this->userManager = $userManager;
@@ -68,7 +64,7 @@ class LoginController extends Controller
 
 	/**
 	 *
-	 * @return Authentication\Manager
+	 * @return Anyx\SocialBundle\Authentication\Manager
 	 */
 	public function getAuthenticationManager() {
 		return $this->authenticationManager;
@@ -76,7 +72,7 @@ class LoginController extends Controller
 
 	/**
 	 *
-	 * @return type 
+	 * @return Symfony\Component\Security\Core\SecurityContext
 	 */
 	public function getSecurityContext() {
 		return $this->securityContext;
@@ -84,7 +80,7 @@ class LoginController extends Controller
 
 	/**
 	 *
-	 * @return AccountFactory
+	 * @return Anyx\SocialUserBundle\User\AccountFactory
 	 */
 	public function getAccountFactory() {
 		return $this->accountFactory;
@@ -96,22 +92,6 @@ class LoginController extends Controller
 	 */
 	public function getUserManager() {
 		return $this->userManager;
-	}
-
-	/**
-	 *
-	 * @return Request
-	 */
-	public function getRequest() {
-		return $this->request;
-	}
-
-	/**
-	 *
-	 * @param Request $request 
-	 */
-	public function setRequest( Request $request) {
-		$this->request = $request;
 	}
 
     /**
@@ -132,9 +112,16 @@ class LoginController extends Controller
 		$userManager = $this->getUserManager();
 		
 		if ( $this->getSecurityContext()->isGranted('ROLE_USER') ) {
+	
+			$accountOwner = $userManager->findUserByAccount( $account );
+			
 			//link account
-			$accountOwner = $this->getSecurityContext()->getToken()->getUser();
-			$accountOwner->addSocialAccount( $account );
+			$currentUser = $this->getSecurityContext()->getToken()->getUser();
+			$currentUser->addSocialAccount( $account );
+			
+			if ( !empty( $accountOwner ) ) {
+				$userManager->mergeUsers( $currentUser, $accountOwner );
+			}
 
 		} else {
 			
@@ -147,9 +134,11 @@ class LoginController extends Controller
 					$accountOwner->getRoles()
 			);
 			$this->getSecurityContext()->setToken($token);
+			
+			$currentUser = $accountOwner;
 		}
 		
-		$userManager->updateUser( $accountOwner );
+		$userManager->updateUser( $currentUser );
 		
 		$backurl = $request->get( 'backurl' );
 		if ( empty( $backurl ) ) {
@@ -157,8 +146,6 @@ class LoginController extends Controller
 		}
 		
 		return new RedirectResponse( $request->getBaseUrl() . $backurl );
-
-		
 	}
 	
 	/**

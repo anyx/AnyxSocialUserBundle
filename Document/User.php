@@ -2,7 +2,7 @@
 
 namespace Anyx\SocialUserBundle\Document;
 
-use Anyx\SocialUserBundle\User\SocialAccount;
+use Anyx\SocialUserBundle\Model\SocialAccount;
 use FOS\UserBundle\Document\User as BaseUser;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
@@ -12,15 +12,25 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
  */
 class User extends BaseUser
 {
-    /**
-     * @MongoDB\Id(strategy="auto")
-     */
-    protected $id;
-	
 	/**
-	 * @MongoDB\EmbedMany(targetDocument="Anyx\SocialUserBundle\User\SocialAccount")
+     * @MongoDB\Id(strategy="auto")
+	 */
+	protected $id;
+
+	/**
+	 * @MongoDB\EmbedMany(targetDocument="Anyx\SocialUserBundle\Model\SocialAccount")
 	 */
 	protected $socialAccounts;
+
+	/**
+	 * @MongoDB\Date
+	 */
+	protected $createdAt;
+
+	/**
+	 * @MongoDB\Date
+	 */
+	protected $updatedAt;
 
 	/**
 	 *
@@ -41,6 +51,45 @@ class User extends BaseUser
 	 * @param SocialAccount $account 
 	 */
 	public function addSocialAccount( SocialAccount $account ) {
+		
+		if ( !empty( $this->socialAccounts ) ) {
+			foreach ( $this->socialAccounts as $existAccount ) {
+				if ( $existAccount->getServiceName() == $account->getServiceName() ) {
+					return false;
+				}
+			}
+		}
+		
 		$this->socialAccounts[] = $account;
+		
+		return true;
+	}
+
+	/**
+	 * @MongoDB\PreUpdate
+	 */
+	public function setUpdatedAt() {
+		$this->updatedAt = new \DateTime();
+	}
+
+	/**
+	 * @MongoDB\PrePersist
+	 */
+	public function setCreatedAt() {
+		$this->createdAt = $this->updatedAt = new \DateTime();
+	}
+	
+	/**
+	 *
+	 */
+	public function getCreatedAt() {
+		return $this->createdAt;
+	}
+
+	/**
+	 *
+	 */
+	public function getUpdatedAt() {
+		return $this->updatedAt;
 	}
 }

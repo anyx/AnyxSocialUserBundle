@@ -1,6 +1,6 @@
 <?php
 
-namespace Anyx\SocialUserBundle\User;
+namespace Anyx\SocialUserBundle\Model;
 
 /**
  * Description of AccountFactory
@@ -9,10 +9,9 @@ namespace Anyx\SocialUserBundle\User;
 class AccountFactory {
 
 	/**
-	 *
-	 * @var type 
+	 * @var string 
 	 */
-	protected $accountClass = 'Anyx\SocialUserBundle\User\SocialAccount';
+	protected $accountClass = 'Anyx\SocialUserBundle\Model\SocialAccount';
 
 	/**
 	 *
@@ -30,7 +29,7 @@ class AccountFactory {
 
 	/**
 	 *
-	 * @return Anyx\SocialUserBundle\User\SocialAccount
+	 * @return Anyx\SocialUserBundle\Model\SocialAccount
 	 */
 	public function getAccountClass() {
 		return $this->accountClass;
