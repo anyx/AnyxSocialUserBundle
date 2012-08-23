@@ -24,10 +24,14 @@ class AnyxSocialUserExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
-		
-		$this->configureFOSUserIntegration( $config, $container );
 
-		$this->configureAccountFactory( $config, $container );
+        if ('custom' !== $config['db_driver']) {
+            $loader->load(sprintf('%s.xml', $config['db_driver']));
+        }
+
+        if ( array_key_exists( 'accounts', $config ) ) {
+            $this->configureAccountFactory( $config, $container );
+        }
 		
 		if ( array_key_exists( 'fos_user', $config ) ) {
 			$this->configureFOSUserIntegration($config, $container);

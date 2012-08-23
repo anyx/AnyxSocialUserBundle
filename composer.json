@@ -1,0 +1,23 @@
+{
+    "name": "anyx/social-user-bundle",
+    "description": "Extension FOSUserBundle for aggregation social accounts",
+    "type": "symfony-bundle",                
+    "authors": [
+        {
+            "name": "Aleksandr Klimenkov",
+            "email": "alx.devel@gmail.com"
+        }
+    ],
+    "source": {
+        "type": "git",
+        "url": "https://github.com/anyx/AnyxSocialUserBundle.git",
+        "reference": "master"
+    },
+    "require": {
+        "anyx/social-bundle": "*"
+    },
+    "target-dir": "Anyx/SocialUserBundle",
+    "autoload": {
+        "psr-0": { "Anyx\\SocialUserBundle": "" }
+    }
+}

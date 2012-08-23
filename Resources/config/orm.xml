@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+		<!-- User managers -->
+		<parameter key="anyx_social_user.user.manager.orm.class">Anyx\SocialUserBundle\Entity\UserManager</parameter>
+	</parameters>
+
+    <services>
+		<service id="anyx_social_user.account.factory" class="%anyx_social_user.account.factory.class%">
+		</service>
+
+		<!-- User managers -->
+		<service id="anyx_social_user.user.manager.orm" class="%anyx_social_user.user.manager.orm.class%">
+            <argument type="service" id="security.encoder_factory" />
+            <argument type="service" id="fos_user.util.username_canonicalizer" />
+            <argument type="service" id="fos_user.util.email_canonicalizer" />
+            <argument type="service" id="fos_user.user_manager" />
+            <argument>%fos_user.model.user.class%</argument>
+			<call method="setDispatcher">
+				<argument type="service" id="event_dispatcher"/>
+			</call>
+		</service>
+	</services>
+
+</container>

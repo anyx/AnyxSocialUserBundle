@@ -22,7 +22,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('anyx_social_user');
 
-		$this->buildFOSUserIntegration($rootNode->children()->arrayNode('fos_user'));
+		$this->buildFOSUserIntegration($rootNode);
 
 		$this->buildAccountsMap($rootNode->children()->arrayNode('accounts'));
 		

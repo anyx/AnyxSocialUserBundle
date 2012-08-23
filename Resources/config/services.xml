@@ -8,9 +8,6 @@
 		<!-- o -->
 		<parameter key="anyx_social_user.account.factory.class">Anyx\SocialUserBundle\Model\AccountFactory</parameter>
 		
-		<!-- User managers -->
-		<parameter key="anyx_social_user.user.manager.mongodb.class">Anyx\SocialUserBundle\Document\UserManager</parameter>
-		<!-- Controllers -->
 		<parameter key="anyx_social_user.controller.login.class">Anyx\SocialUserBundle\Controller\LoginController</parameter>
 
 	</parameters>
@@ -19,18 +16,6 @@
 		<service id="anyx_social_user.account.factory" class="%anyx_social_user.account.factory.class%">
 		</service>
 
-		<!-- User managers -->
-		<service id="anyx_social_user.user.manager.mongodb" class="%anyx_social_user.user.manager.mongodb.class%">
-            <argument type="service" id="security.encoder_factory" />
-            <argument type="service" id="fos_user.util.username_canonicalizer" />
-            <argument type="service" id="fos_user.util.email_canonicalizer" />
-            <argument type="service" id="fos_user.document_manager" />
-            <argument>%fos_user.model.user.class%</argument>
-			<call method="setDispatcher">
-				<argument type="service" id="event_dispatcher"/>
-			</call>
-		</service>
-		
 		<!-- Controllers -->
 		<service id="anyx_social_user.controller.login" class="%anyx_social_user.controller.login.class%">
 			<argument type="service" id="anyx_social.authentication.manager" />
