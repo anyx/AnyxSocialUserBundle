@@ -6,12 +6,12 @@
 
     <parameters>
 		<!-- User managers -->
-		<parameter key="anyx_social_user.user.manager.mongodb.class">Anyx\SocialUserBundle\Document\UserManager</parameter>
+		<parameter key="anyx_social_user.user.manager.class">Anyx\SocialUserBundle\Doctrine\UserManager</parameter>
 	</parameters>
 
     <services>
 		<!-- User managers -->
-		<service id="anyx_social_user.user.manager.mongodb" class="%anyx_social_user.user.manager.mongodb.class%">
+		<service id="anyx_social_user.user.manager" class="%anyx_social_user.user.manager.class%" public="false">
             <argument type="service" id="security.encoder_factory" />
             <argument type="service" id="fos_user.util.username_canonicalizer" />
             <argument type="service" id="fos_user.util.email_canonicalizer" />

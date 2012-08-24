@@ -6,19 +6,16 @@
 
     <parameters>
 		<!-- User managers -->
-		<parameter key="anyx_social_user.user.manager.orm.class">Anyx\SocialUserBundle\Entity\UserManager</parameter>
+		<parameter key="anyx_social_user.user.manager.class">Anyx\SocialUserBundle\Doctrine\UserManager</parameter>
 	</parameters>
 
     <services>
-		<service id="anyx_social_user.account.factory" class="%anyx_social_user.account.factory.class%">
-		</service>
-
 		<!-- User managers -->
-		<service id="anyx_social_user.user.manager.orm" class="%anyx_social_user.user.manager.orm.class%">
+		<service id="anyx_social_user.user.manager" class="%anyx_social_user.user.manager.class%" public="false">
             <argument type="service" id="security.encoder_factory" />
             <argument type="service" id="fos_user.util.username_canonicalizer" />
             <argument type="service" id="fos_user.util.email_canonicalizer" />
-            <argument type="service" id="fos_user.user_manager" />
+            <argument type="service" id="fos_user.entity_manager" />
             <argument>%fos_user.model.user.class%</argument>
 			<call method="setDispatcher">
 				<argument type="service" id="event_dispatcher"/>

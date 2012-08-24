@@ -32,10 +32,6 @@ class AnyxSocialUserExtension extends Extension
         if ( array_key_exists( 'accounts', $config ) ) {
             $this->configureAccountFactory( $config, $container );
         }
-		
-		if ( array_key_exists( 'fos_user', $config ) ) {
-			$this->configureFOSUserIntegration($config, $container);
-		}
     }
 
 	/**
@@ -49,16 +45,4 @@ class AnyxSocialUserExtension extends Extension
 		$container->getDefinition('anyx_social_user.account.factory')
 				->addArgument('%anyx_social_user.acconts.map%');
 	}
-	
-	/**
-	 * 
-	 */
-	private function configureFOSUserIntegration( array $config, ContainerBuilder $container ) {
-		
-		$dbDriver = $config['fos_user']['db_driver'];
-		
-		$userManager = 'anyx_social_user.user.manager.' . $dbDriver;
-		
-		$container->addAliases(array('anyx_social_user.user.manager' => $userManager));
-	}	
 }
