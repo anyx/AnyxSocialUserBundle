@@ -48,6 +48,7 @@ class Configuration implements ConfigurationInterface
 	
 		$rootNode
 			->children()
+            ->scalarNode('class')->defaultValue('anyx_social_user.user.account.class')->end()
 			->arrayNode('map')
 				->useAttributeAsKey('services')
 					->prototype('array')

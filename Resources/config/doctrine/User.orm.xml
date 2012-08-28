@@ -5,8 +5,5 @@
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <mapped-superclass name="Anyx\SocialUserBundle\Entity\User">
-
-
     </mapped-superclass>
-
 </doctrine-mapping>

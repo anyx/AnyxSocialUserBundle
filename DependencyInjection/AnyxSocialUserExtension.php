@@ -30,7 +30,7 @@ class AnyxSocialUserExtension extends Extension
         }
 
         if ( array_key_exists( 'accounts', $config ) ) {
-            $this->configureAccountFactory( $config, $container );
+            $this->configureAccountManager( $config, $container );
         }
     }
 
@@ -39,10 +39,14 @@ class AnyxSocialUserExtension extends Extension
 	 * @param array $config
 	 * @param ContainerBuilder $container 
 	 */
-	private function configureAccountFactory( array $config, ContainerBuilder $container ) {
+	private function configureAccountManager( array $config, ContainerBuilder $container ) {
 
 		$container->setParameter('anyx_social_user.acconts.map',  $config['accounts']['map']);
-		$container->getDefinition('anyx_social_user.account.factory')
+		$container->getDefinition('anyx_social_user.account.manager')
 				->addArgument('%anyx_social_user.acconts.map%');
+        
+        if (array_key_exists('class', $config['accounts'])) {
+            $container->setParameter('anyx_social_user.user.account.class', $config['accounts']['class']);
+        }
 	}
 }

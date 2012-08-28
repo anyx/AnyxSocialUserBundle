@@ -15,9 +15,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 use Anyx\SocialBundle\Authentication;
-use Anyx\SocialUserBundle\Model\AccountFactory;
+use Anyx\SocialUserBundle\Model\AccountManager;
 
-use FOS\UserBundle\Document\UserManager as UserManager;
+use Anyx\SocialUserBundle\Doctrine\UserManager as UserManager;
 
 /**
  * @Route("",service="anyx_social_user.controller.login") 
@@ -33,7 +33,7 @@ class LoginController extends Controller
 	/**
 	 * @var Anyx\SocialUserBundle\User\AccountFactory;
 	 */
-	protected $accountFactory;
+	protected $accountManager;
 	
 	/**
 	 * @var FOS\UserBundle\Document\UserManager
@@ -52,13 +52,13 @@ class LoginController extends Controller
 	 * @param type $securityContext 
 	 */
 	function __construct(	Authentication\Manager $authenticationManager,
-							AccountFactory $accountFactory,
+							AccountManager $accountFactory,
 							UserManager $userManager,
 							SecurityContext $securityContext ) {
 		
 		$this->authenticationManager = $authenticationManager;
 		$this->userManager = $userManager;
-		$this->accountFactory = $accountFactory;
+		$this->accountManager = $accountFactory;
 		$this->securityContext = $securityContext;
 	}
 
@@ -82,8 +82,8 @@ class LoginController extends Controller
 	 *
 	 * @return Anyx\SocialUserBundle\User\AccountFactory
 	 */
-	public function getAccountFactory() {
-		return $this->accountFactory;
+	public function getAccountManager() {
+		return $this->accountManager;
 	}
 
 	/**
@@ -95,7 +95,7 @@ class LoginController extends Controller
 	}
 
     /**
-     * @Route("/social/auth/{service}",  name="anyx_social_auth")
+     * @Route("/auth/{service}",  name="anyx_social_auth")
      */
 	public function authAction( $service, Request $request ) {
 		
@@ -107,7 +107,7 @@ class LoginController extends Controller
 
 		$userData = $manager->getProviderFactory()->getProvider( $service )->getUserData( $accessToken );
 		
-		$account = $this->getAccountFactory()->createAccount( $service, $userData );
+		$account = $this->getAccountManager()->getAccount( $service, $userData );
 		
 		$userManager = $this->getUserManager();
 		
@@ -138,6 +138,10 @@ class LoginController extends Controller
 			$currentUser = $accountOwner;
 		}
 		
+        if ( null == $currentUser->getEmail() ) {
+            $currentUser->setEmail('noemail');
+        }
+
 		$userManager->updateUser( $currentUser );
 		
 		$backurl = $request->get( 'backurl' );

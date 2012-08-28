@@ -9,13 +9,19 @@ use FOS\UserBundle\Doctrine\UserManager as BaseUserManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Anyx\SocialUserBundle\Model;
 
-class UserManager extends BaseUserManager
+abstract class UserManager extends BaseUserManager
 {
     /**
 	 *
 	 */
 	private $dispatcher;
-	
+
+	/**
+	 *
+	 * @param SocialAccount $account 
+	 */
+	abstract public function findUserByAccount( BaseSocialAccount $account );
+
 	/**
 	 *
 	 * @return EventDispatcherInterface $dispatcher
@@ -39,9 +45,16 @@ class UserManager extends BaseUserManager
 	public function createUserFromAccount( BaseSocialAccount $account ) {
 		$user = $this->createUser();
 		
+        $email = $account->getValue('email');
+        
 		$user->addSocialAccount( $account );
-		$user->setUsername( $account->getServiceName() . $account->getAccountId() . time() );
-		
+		$user
+            ->setUsername( $account->getServiceName() . $account->getAccountId() . time() )
+            ->setPassword( $account->getServiceName() . $account->getAccountId() . time() )
+            ->setEmail( $email )
+            ->setEmailCanonical( $email )
+        ;
+        
 		return $user;
 	}
 	
@@ -60,17 +73,6 @@ class UserManager extends BaseUserManager
 		return $user;
 	}
 
-	/**
-	 *
-	 * @param SocialAccount $account 
-	 */
-	public function findUserByAccount( BaseSocialAccount $account ) {
-        return $this->findUserBy(array(
-            'socialAccounts.accountId'      => (string) $account->getAccountId(),
-            'socialAccounts.serviceName'    => $account->getServiceName()
-        ));
-	}    
-    
 	/**
 	 *
 	 * @param Anyx\SocialUserBundle\Model\User $parent

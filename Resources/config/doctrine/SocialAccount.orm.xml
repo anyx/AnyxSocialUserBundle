@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping"
-                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                        xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
-                        http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-	<embedded-document name="Anyx\SocialUserBundle\Model\SocialAccount">
-		<field fieldName="id" id="true" />
-		<field fieldName="serviceName" name="serviceName" type="string" />
-		<field fieldName="accountId" name="accountId" type="string" />
-		<field name="userName" fieldName="userName" type="string" />
-		<field name="accountData" fieldName="accountData" type="string" />
-	</embedded-document>
+    <mapped-superclass name="Anyx\SocialUserBundle\Entity\SocialAccount" table="t_social_account">
+        
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
 
-</doctrine-mongo-mapping>
+		<field name="serviceName" column="service_name" type="string" />
+		<field name="accountId" column="account_id" type="integer" />
+		<field name="accountData" column="data" type="string" />
+        
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="serializeData"/>
+            <lifecycle-callback type="postLoad" method="deserializeData"/>
+        </lifecycle-callbacks>
+        
+    </mapped-superclass>
+</doctrine-mapping>
