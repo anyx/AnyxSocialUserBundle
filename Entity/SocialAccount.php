@@ -27,4 +27,18 @@ class SocialAccount extends BaseSocialAccount
     {
         $this->owner = $owner;
     }
+
+    /**
+     * 
+     */
+    public function serializeData() {
+        $this->accountData = json_encode($this->data);
+    }
+
+    /**
+     * 
+     */
+    public function deserializeData() {
+        $this->data = json_decode($this->accountData, true);
+    }
 }

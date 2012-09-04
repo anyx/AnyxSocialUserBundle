@@ -22,41 +22,40 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('anyx_social_user');
 
-		$this->buildFOSUserIntegration($rootNode);
+        $this->buildFOSUserIntegration($rootNode);
 
-		$this->buildAccountsMap($rootNode->children()->arrayNode('accounts'));
+        $this->buildAccountsMap($rootNode->children()->arrayNode('accounts'));
 		
-		return $treeBuilder;
+        return $treeBuilder;
     }
 	
 	/**
 	 * @todo false by default
 	 * @param ArrayNodeDefinition $rootNode 
 	 */
-	private function buildFOSUserIntegration( ArrayNodeDefinition $rootNode ) {
-		$rootNode
-			->children()
-				->scalarNode('db_driver')
-				->end()
+	private function buildFOSUserIntegration( ArrayNodeDefinition $rootNode )
+    {
+        $rootNode
+            ->children()
+                ->scalarNode('db_driver')
+                ->end()
 		;		
 	}
 	
 	/**
 	 *
 	 */
-	private function buildAccountsMap( ArrayNodeDefinition $rootNode ) {
-	
-		$rootNode
-			->children()
+	private function buildAccountsMap( ArrayNodeDefinition $rootNode )
+    {
+
+        $rootNode
+            ->children()
             ->scalarNode('class')->defaultValue('anyx_social_user.user.account.class')->end()
-			->arrayNode('map')
-				->useAttributeAsKey('services')
-					->prototype('array')
-						->children()
-							->scalarNode('accountId')
-							->end()	
-							->scalarNode('userName')
-							->end()
+            ->arrayNode('map')
+                ->useAttributeAsKey('services')
+                ->example(array('avatar' => '"data.avatar"'))
+                ->prototype('variable')->end()
+            ->end()
 		;
 	}	
 }

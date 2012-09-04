@@ -31,7 +31,7 @@ class LoginController extends Controller
 	protected $authenticationManager;
 
 	/**
-	 * @var Anyx\SocialUserBundle\User\AccountFactory;
+	 * @var Anyx\SocialUserBundle\User\AccountManager;
 	 */
 	protected $accountManager;
 	
@@ -48,17 +48,18 @@ class LoginController extends Controller
 	/**
 	 *
 	 * @param Authentication\Manager $authenticationManager
+     * @param AccountManager $accountManager,
 	 * @param UserManager $userManager
 	 * @param type $securityContext 
 	 */
 	function __construct(	Authentication\Manager $authenticationManager,
-							AccountManager $accountFactory,
+							AccountManager $accountManager,
 							UserManager $userManager,
 							SecurityContext $securityContext ) {
 		
 		$this->authenticationManager = $authenticationManager;
 		$this->userManager = $userManager;
-		$this->accountManager = $accountFactory;
+		$this->accountManager = $accountManager;
 		$this->securityContext = $securityContext;
 	}
 
@@ -150,21 +151,5 @@ class LoginController extends Controller
 		}
 		
 		return new RedirectResponse( $request->getBaseUrl() . $backurl );
-	}
-	
-	/**
-	 * @todo refacator this shit
-	 * 
-	 * @return string
-	 */
-	protected function getRedirectUri( Request $request ) {
-
-		$path = $request->getUri();
-		$path = str_replace( $request->getQueryString(), '', $request->getUri() );
-		if (strpos($path, '?') == strlen($path) - 1 ) {
-			$path = substr($path, 0, -1);
-		}
-		
-		return $path;
 	}
 }

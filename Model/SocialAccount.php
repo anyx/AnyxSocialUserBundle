@@ -122,20 +122,6 @@ class SocialAccount
     } 
 
     /**
-     * 
-     */
-    public function serializeData() {
-        $this->accountData = json_encode($this->data);
-    }
-
-    /**
-     * 
-     */
-    public function deserializeData() {
-        $this->data = json_decode($this->accountData);
-    }
-
-    /**
      *
      * @param string $field
      * @return string
