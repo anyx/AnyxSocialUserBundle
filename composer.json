@@ -14,7 +14,7 @@
         "reference": "master"
     },
     "require": {
-        "anyx/social-bundle": "*"
+        "anyx/social-bundle": "dev-master"
     },
     "target-dir": "Anyx/SocialUserBundle",
     "autoload": {
