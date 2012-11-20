@@ -15,6 +15,7 @@
 			<argument type="service" id="anyx_social_user.account.manager" />
 			<argument type="service" id="fos_user.user_manager" />
 			<argument type="service" id="security.context" />
+            <argument>%fos_user.firewall_name%</argument>
 		</service>		
 	</services>
 

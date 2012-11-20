@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="anyx_social_user.account.manager.class">Anyx\SocialUserBundle\Document\AccountManager</parameter>
-		<parameter key="anyx_social_user.user.manager.class">Anyx\SocialUserBundle\Doctrine\UserManager</parameter>
+		<parameter key="anyx_social_user.user.manager.class">Anyx\SocialUserBundle\Document\UserManager</parameter>
         <parameter key="anyx_social_user.user.account.class">Anyx\SocialUserBundle\Document\SocialAccount</parameter>
 	</parameters>
 
@@ -15,6 +15,9 @@
             <argument type="service" id="fos_user.document_manager" />
    			<call method="setAccountClass">
 				<argument>%anyx_social_user.user.account.class%</argument>
+			</call>
+   			<call method="setUserClass">
+				<argument>%fos_user.model.user.class%</argument>
 			</call>
 		</service>
 		<!-- User managers -->

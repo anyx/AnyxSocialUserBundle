@@ -37,6 +37,11 @@ class SocialAccount
     protected $data;
 
     /**
+     * @var string
+     */
+    protected $userName;
+
+    /**
 	 *
 	 */
 	public function getId()
@@ -83,6 +88,24 @@ class SocialAccount
     {
 		return $this->accountData;
 	}
+
+    /**
+     * 
+     * @return string
+     */
+    public function getUserName()
+    {
+        return $this->userName;
+    }
+
+    /**
+     * 
+     * @param string $userName
+     */
+    public function setUserName($userName)
+    {
+        $this->userName = $userName;
+    }
 
     /**
      *

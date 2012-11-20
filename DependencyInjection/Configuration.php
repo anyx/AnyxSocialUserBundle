@@ -4,7 +4,6 @@ namespace Anyx\SocialUserBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 /**
@@ -25,37 +24,36 @@ class Configuration implements ConfigurationInterface
         $this->buildFOSUserIntegration($rootNode);
 
         $this->buildAccountsMap($rootNode->children()->arrayNode('accounts'));
-		
+
         return $treeBuilder;
     }
-	
-	/**
-	 * @todo false by default
-	 * @param ArrayNodeDefinition $rootNode 
-	 */
-	private function buildFOSUserIntegration( ArrayNodeDefinition $rootNode )
+
+    /**
+     * @todo false by default
+     * @param ArrayNodeDefinition $rootNode 
+     */
+    private function buildFOSUserIntegration(ArrayNodeDefinition $rootNode)
     {
         $rootNode
-            ->children()
+                ->children()
                 ->scalarNode('db_driver')
                 ->end()
-		;		
-	}
-	
-	/**
-	 *
-	 */
-	private function buildAccountsMap( ArrayNodeDefinition $rootNode )
-    {
+        ;
+    }
 
+    /**
+     *
+     */
+    private function buildAccountsMap(ArrayNodeDefinition $rootNode)
+    {
         $rootNode
-            ->children()
-            ->scalarNode('class')->defaultValue('anyx_social_user.user.account.class')->end()
-            ->arrayNode('map')
+                ->children()
+                ->scalarNode('class')->end()
+                ->arrayNode('map')
                 ->useAttributeAsKey('services')
                 ->example(array('avatar' => '"data.avatar"'))
                 ->prototype('variable')->end()
-            ->end()
-		;
-	}	
+                ->end()
+        ;
+    }
 }
