@@ -143,10 +143,6 @@ class LoginController extends Controller
             $currentUser = $accountOwner;
         }
 
-        if (null == $currentUser->getEmail()) {
-            $currentUser->setEmail('noemail');
-        }
-
         $userManager->updateUser($currentUser);
 
         $backurl = $request->get('backurl');

@@ -36,11 +36,19 @@ abstract class AccountManager
      *
      * @param array $accountsMap 
      */
-    function __construct(ObjectManager $objectManager, array $accountsMap)
+    public function __construct(ObjectManager $objectManager, array $accountsMap)
     {
         $this->objectManager = $objectManager;
         $this->accountsMap = $accountsMap;
-        SocialAccount::setCommonDataMap($accountsMap);
+        $this->initAccountsMap();
+    }
+
+    /**
+     * 
+     */
+    public function initAccountsMap()
+    {
+        SocialAccount::setCommonDataMap($this->accountsMap);
     }
 
     /**
@@ -114,4 +122,5 @@ abstract class AccountManager
         }
         return $this->accountsMap[$service];
     }
+
 }

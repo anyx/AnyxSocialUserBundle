@@ -4,32 +4,30 @@ namespace Anyx\SocialUserBundle\Document;
 
 use Anyx\SocialUserBundle\Model\SocialAccount;
 use FOS\UserBundle\Document\User as BaseUser;
-use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
  * 
- * @MongoDB\Document
  */
 class User extends BaseUser
 {
 
     /**
-     * @MongoDB\Id(strategy="auto")
+     * 
      */
     protected $id;
 
     /**
-     * @MongoDB\EmbedMany(targetDocument="Anyx\SocialUserBundle\Document\SocialAccount")
+     * 
      */
     protected $socialAccounts;
 
     /**
-     * @MongoDB\Date
+     * 
      */
     protected $createdAt;
 
     /**
-     * @MongoDB\Date
+     * 
      */
     protected $updatedAt;
 
@@ -105,7 +103,7 @@ class User extends BaseUser
     }
     
     /**
-     * @MongoDB\PreUpdate
+     * 
      */
     public function setUpdatedAt()
     {
@@ -113,11 +111,12 @@ class User extends BaseUser
     }
 
     /**
-     * @MongoDB\PrePersist
+     * 
      */
     public function setCreatedAt()
     {
         $this->createdAt = $this->updatedAt = new \DateTime();
+        $this->setUpdatedAt();
     }
 
     /**

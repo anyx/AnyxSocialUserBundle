@@ -19,7 +19,7 @@ class UserManager extends BaseManager
         return $this->objectManager
                     ->getRepository($this->getClass())
                     ->findOneBy(array(
-                        'accounts.$id' => $account->getAccountId(),
+                        'socialAccounts.accountId' => (string)$account->getAccountId(),
                     ));
     }
 }

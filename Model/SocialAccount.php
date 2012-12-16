@@ -3,108 +3,73 @@
 namespace Anyx\SocialUserBundle\Model;
 
 use Anyx\SocialUserBundle\Util\ValueFinder;
+
 /**
  * 
  */
 class SocialAccount
 {
-    
+
     protected static $dataMap;
 
     /**
-	 * 
+     * 
      */
     protected $id;
-	
-	/**
-	 * 
-	 */
-	protected $serviceName;
-	
-	/**
-	 * 
-	 */
-	protected $accountId;
-
-	/**
-	 * @var string
-	 */
-	protected $accountData;
 
     /**
-     * @var array
+     * 
      */
-    protected $data;
+    protected $serviceName;
+
+    /**
+     * 
+     */
+    protected $accountId;
 
     /**
      * @var string
      */
-    protected $userName;
+    protected $data;
 
     /**
-	 *
-	 */
-	public function getId()
-    {
-		return $this->id;
-	}
-
-	/**
-	 *
-	 */
-	public function setId($id)
-    {
-		$this->id = $id;
-	}
-
-	/**
-	 *
-	 */
-	public function getServiceName()
-    {
-		return $this->serviceName;
-	}
-
-	/**
-	 *
-	 */
-	public function setServiceName($serviceName)
-    {
-		$this->serviceName = $serviceName;
-	}
-
-	/**
-	 *
-	 */
-	public function getAccountId()
-    {
-		return $this->accountId;
-	}
-
-	/**
-	 *
-	 */
-	public function getAccountData()
-    {
-		return $this->accountData;
-	}
-
-    /**
-     * 
-     * @return string
+     *
      */
-    public function getUserName()
+    public function getId()
     {
-        return $this->userName;
+        return $this->id;
     }
 
     /**
-     * 
-     * @param string $userName
+     *
      */
-    public function setUserName($userName)
+    public function setId($id)
     {
-        $this->userName = $userName;
+        $this->id = $id;
+    }
+
+    /**
+     *
+     */
+    public function getServiceName()
+    {
+        return $this->serviceName;
+    }
+
+    /**
+     *
+     */
+    public function setServiceName($serviceName)
+    {
+        $this->serviceName = $serviceName;
+    }
+
+    /**
+     *
+     */
+    public function getAccountId()
+    {
+        return $this->accountId;
     }
 
     /**
@@ -123,18 +88,18 @@ class SocialAccount
     public function setData($data)
     {
         $this->data = $data;
-        $this->setAccountId( $this->getValue('accountId') );
+        $this->setAccountId($this->getValue('accountId'));
     }
 
     /**
      *
      * @param array $map 
      */
-    public static function setCommonDataMap( array $map )
+    public static function setCommonDataMap(array $map)
     {
         self::$dataMap = $map;
     }
-    
+
     /**
      *
      * @return array
@@ -142,22 +107,24 @@ class SocialAccount
     public function getDataMap()
     {
         return self::$dataMap[$this->getServiceName()];
-    } 
+    }
 
     /**
      *
      * @param string $field
      * @return string
      */
-    public function getValue( $field ) {
-        return ValueFinder::findFieldValue( $field, $this->getData(), $this->getDataMap() );
+    public function getValue($field)
+    {
+        return ValueFinder::findFieldValue($field, $this->getData(), $this->getDataMap());
     }
 
-	/**
-	 *
-	 */
-	protected function setAccountId($accountId)
+    /**
+     *
+     */
+    protected function setAccountId($accountId)
     {
-		$this->accountId = $accountId;
-	}
+        $this->accountId = $accountId;
+    }
+
 }

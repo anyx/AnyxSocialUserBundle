@@ -7,6 +7,7 @@ use Anyx\SocialUserBundle\Model\SocialAccount as BaseSocialAccount;
 use FOS\UserBundle\Doctrine\UserManager as BaseUserManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Anyx\SocialUserBundle\Model;
+use Anyx\SocialUserBundle\Events;
 
 abstract class UserManager extends BaseUserManager
 {
@@ -57,7 +58,11 @@ abstract class UserManager extends BaseUserManager
             ->setEmailCanonical($email)
         ;
 
-        return $user;
+        $event = $this->getDispatcher()->dispatch(
+                Events::onCreateUser, new Event\CreateUserEvent($user, $account)
+        );
+        
+        return $event->getUser();
     }
 
     /**
@@ -67,9 +72,9 @@ abstract class UserManager extends BaseUserManager
      */
     public function getAccountOwner(BaseSocialAccount $account)
     {
-        if ($account->getId()) {
-            $user = $this->findUserByAccount($account);
-        } else {
+        $user = $this->findUserByAccount($account);
+        
+        if (empty($user)) {
             $user = $this->createUserFromAccount($account);
         }
 
@@ -83,6 +88,6 @@ abstract class UserManager extends BaseUserManager
      */
     public function mergeUsers(Model\User $parent, Model\User $child)
     {
-        $this->getDispatcher()->dispatch(SocialUserBundle\Events::onMergeUsers, new Event\MergeUsersEvent($parent, $child));
+        $this->getDispatcher()->dispatch(Events::onMergeUsers, new Event\MergeUsersEvent($parent, $child));
     }
 }
