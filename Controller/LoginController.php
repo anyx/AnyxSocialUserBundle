@@ -145,13 +145,24 @@ class LoginController extends Controller
 
         $userManager->updateUser($currentUser);
 
+        return new RedirectResponse($this->getSuccessUrl($request));
+    }
+
+    /**
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return string
+     */
+    protected function getSuccessUrl(Request $request)
+    {
         $backurl = $request->get('backurl');
         if (empty($backurl)) {
             $backurl = '/';
         }
 
-        return new RedirectResponse($request->getBaseUrl() . $backurl);
+        return $backurl;
     }
+
 
     /**
      * @return string
